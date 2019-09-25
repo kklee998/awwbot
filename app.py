@@ -2,9 +2,11 @@ import praw
 import os
 from telegram.ext import Updater, CommandHandler
 import logging
+from random import randrange
 
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+logging.basicConfig(format='%(asctime)s - %(name)s \
+                    - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
 logger = logging.getLogger()
@@ -12,11 +14,8 @@ logger.setLevel(logging.INFO)
 
 CLIENT_ID = os.environ['CLIENT_ID']
 CLIENT_SECRET = os.environ['CLIENT_SECRET']
-CLIENT_AGENT = f'android:{CLIENT_ID}:v (by /u/HolyFireX)'
+CLIENT_AGENT = f'Telegram Bot:awwbot:v0.1 (by /u/HolyFireX)'
 TELEGRAM_TOKEN = os.environ['TELEGRAM_ID']
-POST_LIMIT = 5
-MULTI = 'awwbot'
-USER = 'HolyFireX'
 
 
 updater = Updater(token=TELEGRAM_TOKEN, use_context=True)
@@ -26,11 +25,23 @@ reddit = praw.Reddit(client_id=CLIENT_ID,
                      client_secret=CLIENT_SECRET,
                      user_agent=CLIENT_AGENT)
 
+POST_LIMIT = 5
+MULTI = 'awwbot'
+USER = 'HolyFireX'
+MULTI_REDDIT = reddit.multireddit(USER, MULTI)
+
 
 def aww(update, context):
-    for submission in reddit.multireddit(USER, MULTI).hot(limit=POST_LIMIT):
+    for submission in MULTI_REDDIT.hot(limit=POST_LIMIT):
         context.bot.send_message(
             chat_id=update.message.chat_id, text=submission.url)
+
+
+def random(update, context):
+    sub_reddit = randrange(0, len(MULTI_REDDIT.subreddits))
+    random_submission = MULTI_REDDIT.subreddits[sub_reddit].random()
+    context.bot.send_message(
+        chat_id=update.message.chat_id, text=random_submission.url)
 
 
 def start(update, context):
@@ -40,9 +51,11 @@ def start(update, context):
 
 start_handler = CommandHandler('start', start)
 aww_handler = CommandHandler('aww', aww)
+random_handler = CommandHandler('random', random)
 
 
 dispatcher.add_handler(start_handler)
 dispatcher.add_handler(aww_handler)
+dispatcher.add_handler(random_handler)
 
 updater.start_polling()
