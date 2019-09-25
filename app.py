@@ -8,24 +8,37 @@ from dotenv import load_dotenv
 load_dotenv()
 
 logging.basicConfig(format='%(asctime)s - %(name)s \
-                    - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+                    - %(levelname)s - %(message)s')
 
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+
+IS_PROD = os.environ['APP_ENV']
+
+if IS_PROD == 'dev':
+    logger.setLevel(logging.DEBUG)
+
+if IS_PROD == 'prod':
+    logger.setLevel(logging.INFO)
+
+print("Logger loaded")
 
 REDDIT_CLIENT_ID = os.environ['REDDIT_CLIENT_ID']
 REDDIT_CLIENT_SECRET = os.environ['REDDIT_CLIENT_SECRET']
 CLIENT_AGENT = f'Telegram Bot:awwbot:v0.1 (by /u/HolyFireX)'
 TELEGRAM_TOKEN = os.environ['TELEGRAM_ID']
 
+print("Env loaded")
 
 updater = Updater(token=TELEGRAM_TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 
+print("Telegram Bot initialised")
+
 reddit = praw.Reddit(client_id=REDDIT_CLIENT_ID,
                      client_secret=REDDIT_CLIENT_SECRET,
                      user_agent=CLIENT_AGENT)
+
+print("Initialised Reddit")
 
 POST_LIMIT = 5
 MULTI = 'awwbot'
@@ -60,13 +73,18 @@ def start(update, context):
         chat_id=update.message.chat_id, text="AWwBOT ACTIVATED!!")
 
 
+print("Register handlers")
+
 start_handler = CommandHandler('start', start)
 aww_handler = CommandHandler('aww', aww)
 random_handler = CommandHandler('random', random)
 
+print("Added handlers")
 
 dispatcher.add_handler(start_handler)
 dispatcher.add_handler(aww_handler)
 dispatcher.add_handler(random_handler)
 
-updater.start_polling()
+
+if __name__ == "__main__":
+    updater.start_polling()
