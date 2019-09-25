@@ -24,7 +24,7 @@ print("Logger loaded")
 
 REDDIT_CLIENT_ID = os.environ['REDDIT_CLIENT_ID']
 REDDIT_CLIENT_SECRET = os.environ['REDDIT_CLIENT_SECRET']
-CLIENT_AGENT = f'Telegram Bot:awwbot:v0.1 (by /u/HolyFireX)'
+CLIENT_AGENT = f'Telegram Bot:awwbot:v0.2 (by /u/HolyFireX)'
 TELEGRAM_TOKEN = os.environ['TELEGRAM_ID']
 
 print("Env loaded")
