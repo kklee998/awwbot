@@ -74,6 +74,16 @@ def golden(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text=msg)
 
 
+def bleach(update, context):
+    '''
+    Get random eyebleach from /r/eyebleach/
+    '''
+
+    bleach = reddit.subreddit('eyebleach')
+    msg = f'Get awwwww\'d  \n {bleach.random().url}'
+    context.bot.send_message(chat_id=update.message.chat_id, txt=msg)
+
+
 def start(update, context):
     '''
     Message returned for /start
@@ -88,6 +98,7 @@ start_handler = CommandHandler('start', start)
 aww_handler = CommandHandler('aww', aww)
 random_handler = CommandHandler('random', random)
 golden_handler = CommandHandler('goldie', golden)
+bleach_handler = CommandHandler('bleach', bleach)
 
 print("Added handlers")
 
@@ -95,6 +106,7 @@ dispatcher.add_handler(start_handler)
 dispatcher.add_handler(aww_handler)
 dispatcher.add_handler(random_handler)
 dispatcher.add_handler(golden_handler)
+dispatcher.add_handler(bleach_handler)
 
 
 if __name__ == "__main__":
