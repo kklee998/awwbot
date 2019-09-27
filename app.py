@@ -81,7 +81,7 @@ def bleach(update, context):
 
     bleach = reddit.subreddit('eyebleach')
     msg = f'Get awwwww\'d  \n {bleach.random().url}'
-    context.bot.send_message(chat_id=update.message.chat_id, txt=msg)
+    context.bot.send_message(chat_id=update.message.chat_id, text=msg)
 
 
 def start(update, context):
