@@ -84,6 +84,18 @@ def bleach(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text=msg)
 
 
+def top_five_aww(update, context):
+    '''
+    Get 5 daily top post from /r/aww
+    '''
+
+    aww = reddit.subreddit('aww')
+    for submission in aww.top('day', limit=5):
+
+        msg = f'TOP FIVE AWW POSTS\n: {submission.url}'
+        context.bot.send_message(chat_id=update.message.chat_id, text=msg)
+
+
 def start(update, context):
     '''
     Message returned for /start
@@ -96,6 +108,7 @@ print("Register handlers")
 
 start_handler = CommandHandler('start', start)
 aww_handler = CommandHandler('aww', aww)
+top_five_aww_handler = CommandHandler('aww5', top_five_aww)
 random_handler = CommandHandler('random', random)
 golden_handler = CommandHandler('goldie', golden)
 bleach_handler = CommandHandler('bleach', bleach)
@@ -104,6 +117,7 @@ print("Added handlers")
 
 dispatcher.add_handler(start_handler)
 dispatcher.add_handler(aww_handler)
+dispatcher.add_handler(top_five_aww_handler)
 dispatcher.add_handler(random_handler)
 dispatcher.add_handler(golden_handler)
 dispatcher.add_handler(bleach_handler)
